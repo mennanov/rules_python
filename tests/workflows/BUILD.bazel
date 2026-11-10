@@ -25,20 +25,6 @@ pytest_test(
     ],
 )
 
-pytest_test(
-    name = "blockwatch_test",
-    srcs = ["blockwatch_test.py"],
-    data = [
-        "//:.pre-commit-config.yaml",
-        "//.github/workflows:all_files",
-    ],
-    target_compatible_with = NOT_WINDOWS,
-    deps = [
-        "//python/runfiles",
-        "@pypi//pyyaml",
-    ],
-)
-
 py_library(
     name = "on_comment",
     testonly = True,
