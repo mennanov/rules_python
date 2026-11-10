@@ -7,7 +7,11 @@ licenses(["notice"])
 build_test(
     name = "bzl_libraries_build_test",
     targets = [
-        # keep sorted
+        # <block keep-sorted>
+        "//python/cc:py_cc_toolchain_bzl",
+        "//python/cc:py_cc_toolchain_info_bzl",
+        "//python/cc:py_extension",
+        "//python/entry_points:py_console_script_binary_bzl",
         "//python:current_py_toolchain_bzl",
         "//python:defs_bzl",
         "//python:proto_bzl",
@@ -21,9 +25,6 @@ build_test(
         "//python:py_runtime_pair_bzl",
         "//python:py_test_bzl",
         "//python:pytest_test",
-        "//python/cc:py_cc_toolchain_bzl",
-        "//python/cc:py_cc_toolchain_info_bzl",
-        "//python/cc:py_extension",
-        "//python/entry_points:py_console_script_binary_bzl",
+        # </block>
     ],
 )

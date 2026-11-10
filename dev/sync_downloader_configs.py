@@ -6,7 +6,7 @@ import sys
 from pathlib import Path
 
 _SUBWORKSPACE_DIRS = (
-    # keep-sorted start
+    # <block keep-sorted>
     "examples/build_file_generation",
     "examples/bzlmod",
     "examples/multi_python_versions",
@@ -32,7 +32,7 @@ _SUBWORKSPACE_DIRS = (
     "tests/integration/uv_lock",
     "tests/integration/validate_test_main",
     "tests/integration/whl_library",
-    # keep-sorted end
+    # </block>
 )
 
 

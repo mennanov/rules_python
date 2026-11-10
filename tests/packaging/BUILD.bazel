@@ -20,8 +20,9 @@ load("//tests/support:support.bzl", "SUPPORTS_BOOTSTRAP_SCRIPT")
 build_test(
     name = "bzl_libraries_build_test",
     targets = [
-        # keep sorted
+        # <block keep-sorted>
         ":bin_tar",
+        # </block>
     ],
 )
 

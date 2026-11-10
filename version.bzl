@@ -15,26 +15,24 @@
 
 # Currently used Bazel version. This version is what the rules here are tested
 # against.
-# LINT.IfChange(bazel_version)
 BAZEL_VERSION = "8.x"
-# LINT.ThenChange(//.bazelversion)
 
 # This is the minimum supported bazel version, that we have some tests for.
-# LINT.IfChange(minimum_bazel_version)
+# <block name="minimum-bazel-version" same-as=".bazelci/presubmit.yml:minimum-bazel-major" same-as-pattern='"(?P<value>\d+)\.'>
 MINIMUM_BAZEL_VERSION = "7.4.1"
-# LINT.ThenChange(//.bazelci/presubmit.yml:minimum_supported_version)
+# </block>
 
 # Versions of Bazel which users should be able to use.
 # Ensures we don't break backwards-compatibility,
 # accidentally forcing users to update their LTS-supported bazel.
 # These are the versions used when testing nested workspaces with
 # rules_bazel_integration_test.
-# LINT.IfChange(supported_bazel_versions)
+# <block name="supported-bazel-versions" affects="MODULE.bazel:bazel-binaries">
 SUPPORTED_BAZEL_VERSIONS = [
     BAZEL_VERSION,
     MINIMUM_BAZEL_VERSION,
 ]
-# LINT.ThenChange(//MODULE.bazel:bazel_binaries)
+# </block>
 
 def bazel_version_to_binary_label(version):
     return "@build_bazel_bazel_%s//:bazel_binary" % version.replace(".", "_")

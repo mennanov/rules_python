@@ -30,13 +30,13 @@ def _py_executable_info_subject_new(info, *, meta):
 
     # buildifier: disable=uninitialized
     public = struct(
-        # go/keep-sorted start
+        # <block keep-sorted>
         actual = info,
         interpreter_path = lambda *a, **k: _py_executable_info_subject_interpreter_path(self, *a, **k),
         main = lambda *a, **k: _py_executable_info_subject_main(self, *a, **k),
         runfiles_without_exe = lambda *a, **k: _py_executable_info_subject_runfiles_without_exe(self, *a, **k),
         venv_runfiles = lambda *a, **k: _py_executable_info_subject_venv_runfiles(self, *a, **k),
-        # go/keep-sorted end
+        # </block>
     )
     self = struct(
         actual = info,

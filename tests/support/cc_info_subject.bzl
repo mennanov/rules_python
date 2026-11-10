@@ -28,11 +28,11 @@ def cc_info_subject(info, *, meta):
 
     # buildifier: disable=uninitialized
     public = struct(
-        # go/keep-sorted start
+        # <block keep-sorted>
         actual = info,
         compilation_context = lambda *a, **k: _cc_info_subject_compilation_context(self, *a, **k),
         linking_context = lambda *a, **k: _cc_info_subject_linking_context(self, *a, **k),
-        # go/keep-sorted end
+        # </block>
     )
     self = struct(
         actual = info,
@@ -82,11 +82,11 @@ def _compilation_context_subject_new(info, *, meta):
     # buildifier: disable=uninitialized
     public = struct(
         actual = info,
-        # go/keep-sorted start
+        # <block keep-sorted>
         direct_headers = lambda *a, **k: _compilation_context_subject_direct_headers(self, *a, **k),
         direct_public_headers = lambda *a, **k: _compilation_context_subject_direct_public_headers(self, *a, **k),
         system_includes = lambda *a, **k: _compilation_context_subject_system_includes(self, *a, **k),
-        # go/keep-sorted end
+        # </block>
     )
     self = struct(
         actual = info,
@@ -158,9 +158,9 @@ def _linking_context_subject_new(info, meta):
     # buildifier: disable=uninitialized
     public = struct(
         actual = info,
-        # go/keep-sorted start
+        # <block keep-sorted>
         linker_inputs = lambda *a, **k: _linking_context_subject_linker_inputs(self, *a, **k),
-        # go/keep-sorted end
+        # </block>
     )
     self = struct(
         actual = info,

@@ -227,13 +227,14 @@ def _ToolchainType_new(name = None, **kwargs):
 
     # buildifier: disable=uninitialized
     self = struct(
-        # keep sorted
+        # <block keep-sorted>
         build = lambda: _ToolchainType_build(self),
         kwargs = kwargs,
         mandatory = kwargs_getter(kwargs, "mandatory"),
         name = kwargs_getter(kwargs, "name"),
         set_mandatory = kwargs_setter(kwargs, "mandatory"),
         set_name = kwargs_setter(kwargs, "name"),
+        # </block>
     )
     return self
 
@@ -429,12 +430,13 @@ def _RuleCfg_update_outputs(self, *others):
 RuleCfg = struct(
     TYPEDEF = _RuleCfg_typedef,
     new = _RuleCfg_new,
-    # keep sorted
+    # <block keep-sorted>
     add_inputs = _RuleCfg_add_inputs,
     add_outputs = _RuleCfg_add_outputs,
     build = _RuleCfg_build,
     update_inputs = _RuleCfg_update_inputs,
     update_outputs = _RuleCfg_update_outputs,
+    # </block>
 )
 
 def _Rule_typedef():
@@ -635,14 +637,15 @@ def _AttrsDict_new(initial):
 
     # buildifier: disable=uninitialized
     self = struct(
-        # keep sorted
+        # <block keep-sorted>
         build = lambda: _AttrsDict_build(self),
         get = lambda *a, **k: self.map.get(*a, **k),
         items = lambda: self.map.items(),
         map = {},
+        pop = lambda *a, **k: self.map.pop(*a, **k),
         put = lambda key, value: _AttrsDict_put(self, key, value),
         update = lambda *a, **k: _AttrsDict_update(self, *a, **k),
-        pop = lambda *a, **k: self.map.pop(*a, **k),
+        # </block>
     )
     if initial:
         _AttrsDict_update(self, initial)

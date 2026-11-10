@@ -137,20 +137,22 @@ _TARGETS = {
 
 _LOADABLE_SYMBOLS = {
     "//python/cc:py_extension.bzl": [
-        # keep sorted
+        # <block keep-sorted>
         "py_extension",
+        # </block>
     ],
     "//python:py_info.bzl": [
-        # keep sorted
+        # <block keep-sorted>
         "PyInfo",
         "VenvSymlinkEntry",
         "VenvSymlinkKind",
+        # </block>
     ],
 }
 
 features = struct(
     TYPEDEF = _features_typedef,
-    # keep sorted
+    # <block keep-sorted>
     headers_abi3 = True,
     loadable_symbols = _LOADABLE_SYMBOLS,
     precompile = True,
@@ -159,4 +161,5 @@ features = struct(
     uses_builtin_rules = False,
     version = _VERSION_PRIVATE if "$Format" not in _VERSION_PRIVATE else "",
     zipapp_rules = True,
+    # </block>
 )

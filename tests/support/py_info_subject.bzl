@@ -18,7 +18,7 @@ load("@rules_testing//lib:truth.bzl", "subjects")
 def _new_py_info_subject(info, *, meta):
     # buildifier: disable=uninitialized
     public = struct(
-        # go/keep-sorted start
+        # <block keep-sorted>
         direct_implicit_pyc_files = lambda *a, **k: _py_info_subject_direct_implicit_pyc_files(self, *a, **k),
         direct_original_sources = lambda *a, **k: _py_info_subject_direct_original_sources(self, *a, **k),
         direct_pyc_files = lambda *a, **k: _py_info_subject_direct_pyc_files(self, *a, **k),
@@ -32,7 +32,7 @@ def _new_py_info_subject(info, *, meta):
         transitive_sources = lambda *a, **k: _py_info_subject_transitive_sources(self, *a, **k),
         type_checking_info = lambda *a, **k: _py_info_subject_type_checking_info(self, *a, **k),
         uses_shared_libraries = lambda *a, **k: _py_info_subject_uses_shared_libraries(self, *a, **k),
-        # go/keep-sorted end
+        # </block>
     )
     self = struct(
         actual = info,

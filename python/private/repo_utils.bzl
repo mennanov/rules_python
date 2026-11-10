@@ -586,22 +586,23 @@ def _rename(mrctx, src, dest):
         fail("Failed to rename {} to {}: {}".format(src, dest, res.stderr))
 
 repo_utils = struct(
-    # keep sorted
+    # <block keep-sorted>
     execute_checked = _execute_checked,
     execute_checked_stdout = _execute_checked_stdout,
     execute_unchecked = _execute_unchecked,
     extract = _extract,
     get_platforms_cpu_name = _get_platforms_cpu_name,
     get_platforms_os_name = _get_platforms_os_name,
+    is_relative_to = _is_relative_to,
     is_repo_debug_enabled = _is_repo_debug_enabled,
     logger = _logger,
     maybe_fix_permissions = _maybe_fix_permissions,
     mkdir = _mkdir,
     norm_path = _norm_path,
     relative_to = _relative_to,
-    is_relative_to = _is_relative_to,
     rename = _rename,
     repo_root_relative_path = _repo_root_relative_path,
     which_checked = _which_checked,
     which_unchecked = _which_unchecked,
+    # </block>
 )

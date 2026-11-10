@@ -14,7 +14,6 @@
 
 bcr_test_module:
   module_path: "examples/bzlmod_build_file_generation"
-  # LINT.IfChange(matrix)
   matrix:
     platform: [
       "debian13",
@@ -22,8 +21,6 @@ bcr_test_module:
       "ubuntu2204",
     ]
     bazel: [7.*, 8.*, 9.*]
-  # LINT.ThenChange(//.bazelci/presubmit.yml:gazelle_bcr)
-  # LINT.IfChange(tasks)
   tasks:
     run_tests:
       name: "Run test module"
@@ -42,4 +39,3 @@ bcr_test_module:
         - ":modules_map"
       test_targets:
         - "//..."
-  # LINT.ThenChange(//.bazelci/presubmit.yml:gazelle_common_bcr)

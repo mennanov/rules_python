@@ -199,9 +199,9 @@ html_context = {
     "current_version": os.environ.get("READTHEDOCS_VERSION", ""),
 }
 
-# LINT.IfChange(permalink_icon)
+# <block name="permalink-icon" same-as="sphinxdocs/sphinxdocs/private/proto_to_markdown.py:permalink-icon" same-as-pattern='"(?P<value>[^"]+)"'>
 html_permalinks_icon = "¶"
-# LINT.ThenChange(//sphinxdocs/sphinxdocs/private/proto_to_markdown.py:permalink_icon)
+# </block>
 
 # These folders are copied to the documentation's HTML output
 html_static_path = ["_static"]

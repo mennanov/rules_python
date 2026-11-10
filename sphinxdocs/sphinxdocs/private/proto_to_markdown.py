@@ -58,9 +58,9 @@ def _span(display: str, classes: str = ".span") -> str:
 def _link_here_icon(anchor: str) -> str:
     # The headerlink class activates some special logic to show/hide
     # text upon mouse-over; it's how headings show a clickable link.
-    # LINT.IfChange(permalink_icon)
+    # <block name="permalink-icon" same-as="docs/conf.py:permalink-icon" same-as-pattern='_link\("(?P<value>[^"]+)"'>
     return _link("¶", anchor, classes=".headerlink")
-    # LINT.ThenChange(//docs/conf.py:permalink_icon)
+    # </block>
 
 
 def _inline_anchor(anchor: str) -> str:

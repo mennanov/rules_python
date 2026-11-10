@@ -4,7 +4,7 @@
 # (e.g. transition inputs/outputs or the transition settings return dict)
 
 labels = struct(
-    # keep sorted
+    # <block keep-sorted keep-sorted-pattern='^(?P<value>[A-Z0-9_]+) ='>
     ADD_SRCS_TO_RUNFILES = str(Label("//python/config_settings:add_srcs_to_runfiles")),
     BOOTSTRAP_IMPL = str(Label("//python/config_settings:bootstrap_impl")),
     BUILD_PYTHON_ZIP = str(Label("//python/config_settings:build_python_zip")),
@@ -37,4 +37,5 @@ labels = struct(
     VENVS_SITE_PACKAGES = str(Label("//python/config_settings:venvs_site_packages")),
     VENVS_USE_DECLARE_SYMLINK = str(Label("//python/config_settings:venvs_use_declare_symlink")),
     VISIBLE_FOR_TESTING = str(Label("//python/private:visible_for_testing")),
+    # </block>
 )

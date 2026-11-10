@@ -18,10 +18,10 @@ import yaml
 
 PRESUBMIT_PATH = ".bazelci/presubmit.yml"
 FLAG_ATTRS = (
-    # keep-sorted start
+    # <block keep-sorted>
     "build_flags",
     "test_flags",
-    # keep-sorted end
+    # </block>
 )
 
 

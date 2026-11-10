@@ -13,7 +13,7 @@ publish = false
 path = "shrubbery/src/lib.rs"
 
 [dependencies]
-# keep-sorted start
+# <block keep-sorted keep-sorted-pattern='^(?P<value>[a-z0-9_-]+) ='>
 anyhow = "1.0.104"
 # Transitive dep of zip: zip's `deflate-flate2` leaves the backend unset, so a
 # top-level pin keeps flate2 on its default pure-Rust backend.
@@ -27,4 +27,4 @@ sha2 = "0.11.1"
 # until rules_rust defines a powerpc64le @rules_rust//rust/platform
 # config_setting.
 zip = { version = "~9.0.5", default-features = false, features = ["deflate-flate2"] }
-# keep-sorted end
+# </block>

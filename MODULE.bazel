@@ -170,7 +170,10 @@ rust = use_extension(
     "rust",
     dev_dependency = True,
 )
+
+# <block name="rust-edition" same-as="crates/Cargo.toml:rust-edition,:rust-release-edition" same-as-pattern='"(?P<value>[^"]+)"'>
 rust.toolchain(edition = "2024")
+# </block>
 
 # Rust toolchains to build the release artifacts for Linux from Linux x86_64;
 # see dev/release_artifacts. They target musl, which Rust can link statically
@@ -183,7 +186,9 @@ rust.repository_set(
     # The default allocator library needs a C toolchain for the target platform,
     # but there isn't one. This one is what rules_rust uses for e.g. Windows.
     allocator_library = "@rules_rust//rust/private/cc:empty",
+    # <block name="rust-release-edition" same-as=":rust-edition" same-as-pattern='"(?P<value>[^"]+)"'>
     edition = "2024",
+    # </block>
     exec_triple = "x86_64-unknown-linux-gnu",
     target_compatible_with = [
         "@platforms//cpu:aarch64",
@@ -194,7 +199,9 @@ rust.repository_set(
     # rules_rust 0.73.0's default version; update it with rules_rust. The
     # default toolchain builds proc-macros, which rustc only loads if they were
     # built by the same version.
+    # <block name="rust-release-version" same-as=":rust-release-version-windows" same-as-pattern='"(?P<value>[^"]+)"'>
     versions = ["1.97.1"],
+    # </block>
 )
 
 # Other targets for the same set; the first tag sets the shared attributes.
@@ -276,7 +283,9 @@ rust.repository_set(
     # On Windows, rules_rust names toolchains after a hash of the full name:
     # rw-1886791612 for this one, after rust_windows_x86_64's rw-1704990954.
     name = "rust_release_windows",
+    # <block name="rust-release-edition-windows" same-as=":rust-edition" same-as-pattern='"(?P<value>[^"]+)"'>
     edition = "2024",
+    # </block>
     exec_triple = "x86_64-pc-windows-msvc",
     target_compatible_with = [
         "@platforms//cpu:x86_32",
@@ -284,7 +293,9 @@ rust.repository_set(
     ],
     target_triple = "i686-pc-windows-msvc",
     # See above.
+    # <block name="rust-release-version-windows" same-as=":rust-release-version" same-as-pattern='"(?P<value>[^"]+)"'>
     versions = ["1.97.1"],
+    # </block>
 )
 
 # Another target for the same set; the first tag sets the shared attributes.
@@ -453,7 +464,7 @@ bazel_binaries = use_extension(
     dev_dependency = True,
 )
 
-# LINT.IfChange(bazel_binaries)
+# <block name="bazel-binaries" affects="version.bzl:supported-bazel-versions">
 bazel_binaries.local(
     name = "self",
     path = "tests/integration/bazel_from_env",
@@ -475,7 +486,7 @@ use_repo(
     # "build_bazel_bazel_rolling",
     "build_bazel_bazel_self",
 )
-# LINT.ThenChange(//version.bzl:supported_bazel_versions)
+# </block>
 
 # TODO @aignas 2025-01-27: should this be moved to `//python/extensions:uv.bzl` or should
 # it stay as it is? I think I may prefer to move it.
@@ -484,15 +495,17 @@ uv = use_extension("//python/uv:uv.bzl", "uv")
 # Here is how we can define platforms for the `uv` binaries - this will affect
 # all of the downstream callers because we are using the extension without
 # `dev_dependency = True`.
-# LINT.IfChange(uv_defaults)
 uv.default(
+    # <block name="uv-default-base-url" same-as="python/uv/private/uv_defaults.bzl:uv-default-base-url" same-as-pattern='"(?P<value>[^"]+)"'>
     base_url = "https://github.com/astral-sh/uv/releases/download",
+    # </block>
     manifest_filename = "dist-manifest.json",
+    # <block name="uv-default-version" same-as="python/uv/private/uv_defaults.bzl:uv-default-version,:uv-dev-version" same-as-pattern='"(?P<value>[^"]+)"'>
     version = "0.13.5",
+    # </block>
 )
 
-# LINT.ThenChange(//python/uv/private/uv_defaults.bzl:uv_defaults)
-# LINT.IfChange(uv_platforms)
+# <block name="uv-platforms" same-as="python/uv/private/uv_defaults.bzl:uv-platforms" same-as-pattern='platform = "(?P<value>[^"]+)"'>
 uv.default(
     compatible_with = [
         "@platforms//os:macos",
@@ -549,8 +562,8 @@ uv.default(
     ],
     platform = "x86_64-unknown-linux-gnu",
 )
+# </block>
 
-# LINT.ThenChange(//python/uv/private/uv_defaults.bzl:uv_platforms)
 use_repo(uv, "uv")
 
 register_toolchains("@uv//:all")
@@ -561,7 +574,9 @@ uv_dev = use_extension(
     dev_dependency = True,
 )
 uv_dev.configure(
+    # <block name="uv-dev-version" same-as=":uv-default-version" same-as-pattern='"(?P<value>[^"]+)"'>
     version = "0.13.5",
+    # </block>
 )
 
 flag_alias(
