@@ -184,13 +184,13 @@ def test_release_workflows_dispatch_on_target_ref():
     assert "release_branch" in on_comment["jobs"]["parse_comment"]["outputs"]
 
     branch_dispatched_jobs = {
-        # keep-sorted start
+        # <block keep-sorted>
         "call_create_rc": "release_create_rc.yaml",
         "call_process_backports_after_add": "release_process_backports.yaml",
         "call_process_backports_only": "release_process_backports.yaml",
         "call_promote": "release_promote.yaml",
         "call_sync_changelog": "release_sync_changelog.yaml",
-        # keep-sorted end
+        # </block>
     }
     for job_name, expected_wf in branch_dispatched_jobs.items():
         job = on_comment["jobs"][job_name]

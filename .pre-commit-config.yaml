@@ -20,39 +20,38 @@ repos:
     rev: v5.0.0  # Use the ref you want to point at
     hooks:
       - id: check-merge-conflict
-  - repo: https://github.com/google/keep-sorted
-    # LINT.IfChange(keep_sorted)
-    rev: v0.10.0
-    # LINT.ThenChange(//.github/workflows/ci.yaml:keep_sorted)
+  - repo: https://github.com/mennanov/blockwatch
+    # <block name="blockwatch-rev" same-as=".github/workflows/ci.yaml:blockwatch-url" same-as-pattern="rev: v(?P<value>\S+)">
+    rev: v0.18.0
+    # </block>
     hooks:
-      - id: keep-sorted
-  - repo: https://github.com/simonepri/ifttt-lint
-    # LINT.IfChange(ifttt_lint)
-    rev: v0.11.3
-    # LINT.ThenChange(//.github/workflows/ci.yaml:ifttt_lint)
-    hooks:
-      - id: ifttt-lint
-      - id: ifttt-lint-diff
-  # LINT.IfChange(buildifier)
+      - id: blockwatch
   - repo: https://github.com/keith/pre-commit-buildifier
+    # <block name="buildifier-rev" same-as=".bazelci/presubmit.yml:buildifier-version" same-as-pattern="rev: (?P<value>\S+)">
     rev: 8.2.1
+    # </block>
     hooks:
       - id: buildifier
         args: &args
+          # <block name="buildifier-args" same-as=".bazelci/presubmit.yml:buildifier-warnings" same-as-pattern="--warnings=(?P<value>\w+)">
           - --warnings=all
+          # </block>
       - id: buildifier-lint
         args: *args
-  # LINT.ThenChange(//.bazelci/presubmit.yml:buildifier)
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    # LINT.IfChange(ruff)
+    # <block name="ruff-rev" same-as=".github/workflows/ci.yaml:ruff-check-version,.github/workflows/ci.yaml:ruff-format-version" same-as-pattern="rev: v(?P<value>\S+)">
     rev: v0.15.14
+    # </block>
     hooks:
       - id: ruff-check
         args: [--fix]
+        # <block name="ruff-check-exclude-hook" same-as=".github/workflows/ci.yaml:ruff-check-exclude" same-as-pattern="exclude: (?P<value>\S+)">
         exclude: testdata
+        # </block>
       - id: ruff-format
+        # <block name="ruff-format-exclude-hook" same-as=".github/workflows/ci.yaml:ruff-format-exclude" same-as-pattern="exclude: (?P<value>\S+)">
         exclude: testdata
-    # LINT.ThenChange(//.github/workflows/ci.yaml:ruff)
+        # </block>
   - repo: local
     hooks:
       - id: update-deleted-packages

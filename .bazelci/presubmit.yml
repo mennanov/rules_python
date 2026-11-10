@@ -13,19 +13,15 @@
 # limitations under the License.
 
 ---
-# LINT.IfChange(buildifier)
 buildifier:
   # Use a specific version to avoid skew issues when new versions are released.
   version: 8.2.1
   warnings: "all"
-# LINT.ThenChange(//.pre-commit-config.yaml:buildifier)
 # NOTE: Minimum supported version is 7.x
-# LINT.IfChange(minimum_supported_version)
 .minimum_supported_version: &minimum_supported_version
   # For testing minimum supported version.
   bazel: 7.x
   skip_in_bazel_downstream_pipeline: "Bazel 7 required"
-# LINT.ThenChange(//version.bzl:minimum_bazel_version)
 .reusable_config: &reusable_config
   # USE_BAZEL_DIFF is disabled because target_compatible_with is used heavily,
   # but BazelCI's bazel-diff integration errors when handling them.
@@ -119,7 +115,6 @@ buildifier:
     - //tests:version_3_14_test
     - //tests:version_default_test
 
-# LINT.IfChange(gazelle_common_bcr)
 .gazelle_common_bcr: &gazelle_common_bcr
     bazel: ${{ bazel }}
     working_directory: gazelle/examples/bzlmod_build_file_generation
@@ -136,21 +131,17 @@ buildifier:
       - ":modules_map"
     test_targets:
       - "//..."
-# LINT.ThenChange(//.bcr/gazelle/presubmit.yml:tasks)
 
 
 matrix:
-  # LINT.IfChange(bcr_matrix)
   platform:
     - ubuntu2204
     - debian13
     - macos_arm64
     - windows
   bazel: [7.x, 8.x, 9.x]
-  # LINT.ThenChange(//.bcr/presubmit.yml:matrix)
 
 tasks:
-  # LINT.IfChange(bcr_test)
   bcr_test:
     name: "BCR: Bazel {bazel}"
     platform: ${{ platform }}
@@ -164,9 +155,7 @@ tasks:
       - "//..."
     test_targets:
       - "//..."
-  # LINT.ThenChange(//.bcr/presubmit.yml:tasks)
 
-  # LINT.IfChange(gazelle_bcr)
   gazelle_bcr_ubuntu:
     <<: *gazelle_common_bcr
     name: "Gazelle: BCR, Bazel {bazel}"
@@ -179,7 +168,6 @@ tasks:
     <<: *gazelle_common_bcr
     name: "Gazelle: BCR, Bazel {bazel}"
     platform: macos_arm64
-  # LINT.ThenChange(//.bcr/gazelle/presubmit.yml:matrix)
 
   gazelle_extension_min:
     <<: *common_workspace_flags_min_bazel

@@ -58,13 +58,23 @@ Order definitions within a file as:
 * Include `(AGENTS: requires user confirmation to use)` in `--help` text and
   error messages for CLI flags that bypass safety checks.
 
-## Sorting
-* Add `keep-sorted` `start` and `end` markers on list and dict config or
-  registry tables, even when they have a single entry.
-
-## Synchronized Sections (`ifttt-lint`)
-* Use `LINT.IfChange(<name>)` and `LINT.ThenChange(<target>)` directives instead
-  of plain `# Keep in sync` comments for paired code or config sections.
+## Sorting and Synchronized Sections (`blockwatch`)
+* Use `blockwatch` for both list sorting and cross-file value/diff consistency.
+* **Inline `<block>` Tags by Default (Code & Logic):**
+  - Place `# <block keep-sorted>` and `# </block>` (or `// <block keep-sorted>`)
+    directly in source files (`.bzl`, `.py`, `.rs`, `.cfg`) around list, dict,
+    or struct fields, even for single-entry lists.
+  - When keys contain whitespace or special comments, use `keep-sorted-pattern`.
+  - For code coupled by behavior or logic that must change together in a diff,
+    use `<block name="..." affects="...">`.
+* **Root `blockwatch.toml` by Default (Config, Metadata, Examples & Fan-out):**
+  - For YAML, TOML, and JSON files, address keys cleanly via RFC 6901 symbol
+    paths (`target = 'file#/symbol'`) with `same-as` rather than adding comment tags.
+  - For user-facing examples (`examples/**`), docstrings, or grammarless
+    templates, declare rules in `blockwatch.toml` to keep source files clean of
+    tool-specific comments.
+  - For values repeated across 3 or more files, configure the spoke rules in
+    `blockwatch.toml` pointing to the single canonical source of truth.
 
 ## Bulk Logging
 * In bulk operations, log a single summary line on success; on failure, list

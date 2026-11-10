@@ -12,15 +12,15 @@ _ANSI_ESCAPE = re.compile(r"\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])")
 _HTTP_5XX_DOWNLOAD_ERROR = re.compile(r"get returned 5\d\d\b", re.IGNORECASE)
 
 _HTTP_GATEWAY_ERRORS = (
-    # keep-sorted start
+    # <block keep-sorted>
     "502 bad gateway",
     "503 service unavailable",
     "504 gateway time-out",
-    # keep-sorted end
+    # </block>
 )
 
 _ERROR_KEYWORDS = _HTTP_GATEWAY_ERRORS + (
-    # keep-sorted start
+    # <block keep-sorted>
     "##[error]",
     "connection reset by peer",
     "critical path",
@@ -48,7 +48,7 @@ _ERROR_KEYWORDS = _HTTP_GATEWAY_ERRORS + (
     "user command error:",
     "would be reformatted",
     "would reformat:",
-    # keep-sorted end
+    # </block>
 )
 
 

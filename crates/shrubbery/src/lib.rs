@@ -8,10 +8,10 @@ use std::ffi::OsString;
 
 /// Canonical subcommand names supported by `shrubbery`.
 pub const SUBCOMMANDS: &[&str] = &[
-    // keep-sorted start
+    // <block keep-sorted>
     "exe_zip_maker",
     "zipper",
-    // keep-sorted end
+    // </block>
 ];
 
 fn print_usage(prog_name: &str, to_stderr: bool) {
@@ -51,10 +51,10 @@ where
     }
 
     match sub_raw.as_ref() {
-        // keep-sorted start
+        // <block keep-sorted>
         "exe_zip_maker" => exe_zip_maker_lib::run_cli(iter),
         "zipper" => zipper_lib::run_cli(iter),
-        // keep-sorted end
+        // </block>
         _ => {
             eprintln!("shrubbery: error: unknown subcommand '{}'", sub_raw);
             print_usage(&prog_name, true);

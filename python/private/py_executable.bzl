@@ -286,10 +286,10 @@ def py_executable_impl(ctx, *, is_test, inherited_environment):
 
 def create_binary_semantics():
     return create_binary_semantics_struct(
-        # keep-sorted start
+        # <block keep-sorted>
         get_native_deps_dso_name = _get_native_deps_dso_name,
         should_build_native_deps_dso = lambda ctx: False,
-        # keep-sorted end
+        # </block>
     )
 
 def _should_create_init_files(ctx):

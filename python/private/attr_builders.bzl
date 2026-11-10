@@ -173,7 +173,7 @@ def _AttrCfg_new(
 
     # buildifier: disable=uninitialized
     self = struct(
-        # keep sorted
+        # <block keep-sorted>
         _state = state,
         build = lambda: _AttrCfg_build(self),
         exec_group = lambda: _AttrCfg_exec_group(self),
@@ -187,6 +187,7 @@ def _AttrCfg_new(
         set_target = lambda: _AttrCfg_set_target(self),
         target = lambda: _AttrCfg_target(self),
         which_cfg = kwargs_getter(state, _ATTR_CFG_WHICH),
+        # </block>
     )
 
     # Only one of the three kwargs should be present. We just process anything
@@ -323,7 +324,7 @@ def _AttrCfg_build(self):
 AttrCfg = struct(
     TYPEDEF = _AttrCfg_typedef,
     new = _AttrCfg_new,
-    # keep sorted
+    # <block keep-sorted>
     exec_group = _AttrCfg_exec_group,
     implementation = _AttrCfg_implementation,
     none = _AttrCfg_none,
@@ -332,6 +333,7 @@ AttrCfg = struct(
     set_none = _AttrCfg_set_none,
     set_target = _AttrCfg_set_target,
     target = _AttrCfg_target,
+    # </block>
 )
 
 def _Bool_typedef():
@@ -378,7 +380,7 @@ def _Bool_new(**kwargs):
 
     # buildifier: disable=uninitialized
     self = struct(
-        # keep sorted
+        # <block keep-sorted>
         build = lambda: attr.bool(**self.kwargs),
         default = kwargs_getter(kwargs, _DEFAULT),
         doc = kwargs_getter_doc(kwargs),
@@ -387,6 +389,7 @@ def _Bool_new(**kwargs):
         set_default = kwargs_setter(kwargs, _DEFAULT),
         set_doc = kwargs_setter_doc(kwargs),
         set_mandatory = kwargs_setter_mandatory(kwargs),
+        # </block>
     )
     return self
 
@@ -510,7 +513,7 @@ def _IntList_new(**kwargs):
 
     # buildifier: disable=uninitialized
     self = struct(
-        # keep sorted
+        # <block keep-sorted>
         allow_empty = _kwargs_getter_allow_empty(kwargs),
         build = lambda: attr.int_list(**self.kwargs),
         default = kwargs_getter(kwargs, _DEFAULT),
@@ -520,6 +523,7 @@ def _IntList_new(**kwargs):
         set_allow_empty = _kwargs_setter_allow_empty(kwargs),
         set_doc = kwargs_setter_doc(kwargs),
         set_mandatory = kwargs_setter_mandatory(kwargs),
+        # </block>
     )
     return self
 
@@ -607,7 +611,7 @@ def _Label_new(**kwargs):
 
     # buildifier: disable=uninitialized
     self = struct(
-        # keep sorted
+        # <block keep-sorted>
         add_allow_files = lambda v: _Label_add_allow_files(self, v),
         allow_files = _kwargs_getter_allow_files(kwargs),
         allow_single_file = kwargs_getter(kwargs, _ALLOW_SINGLE_FILE),
@@ -626,6 +630,7 @@ def _Label_new(**kwargs):
         set_doc = kwargs_setter_doc(kwargs),
         set_executable = kwargs_setter(kwargs, "executable"),
         set_mandatory = kwargs_setter_mandatory(kwargs),
+        # </block>
     )
     return self
 
@@ -750,7 +755,7 @@ def _LabelKeyedStringDict_new(**kwargs):
 
     # buildifier: disable=uninitialized
     self = struct(
-        # keep sorted
+        # <block keep-sorted>
         add_allow_files = lambda *v: _LabelKeyedStringDict_add_allow_files(self, *v),
         allow_empty = _kwargs_getter_allow_empty(kwargs),
         allow_files = _kwargs_getter_allow_files(kwargs),
@@ -767,6 +772,7 @@ def _LabelKeyedStringDict_new(**kwargs):
         set_default = kwargs_setter(kwargs, _DEFAULT),
         set_doc = kwargs_setter_doc(kwargs),
         set_mandatory = kwargs_setter_mandatory(kwargs),
+        # </block>
     )
     return self
 
@@ -859,7 +865,7 @@ def _LabelList_new(**kwargs):
 
     # buildifier: disable=uninitialized
     self = struct(
-        # keep sorted
+        # <block keep-sorted>
         allow_empty = _kwargs_getter_allow_empty(kwargs),
         allow_files = _kwargs_getter_allow_files(kwargs),
         aspects = _kwargs_getter_aspects(kwargs),
@@ -875,6 +881,7 @@ def _LabelList_new(**kwargs):
         set_default = kwargs_setter(kwargs, _DEFAULT),
         set_doc = kwargs_setter_doc(kwargs),
         set_mandatory = kwargs_setter_mandatory(kwargs),
+        # </block>
     )
     return self
 
@@ -920,13 +927,14 @@ def _Output_new(**kwargs):
 
     # buildifier: disable=uninitialized
     self = struct(
-        # keep sorted
+        # <block keep-sorted>
         build = lambda: attr.output(**self.kwargs),
         doc = kwargs_getter_doc(kwargs),
         kwargs = kwargs,
         mandatory = kwargs_getter_mandatory(kwargs),
         set_doc = kwargs_setter_doc(kwargs),
         set_mandatory = kwargs_setter_mandatory(kwargs),
+        # </block>
     )
     return self
 
@@ -1352,7 +1360,7 @@ StringListDict = struct(
 )
 
 attrb = struct(
-    # keep sorted
+    # <block keep-sorted>
     Bool = _Bool_new,
     Int = _Int_new,
     IntList = _IntList_new,
@@ -1367,4 +1375,5 @@ attrb = struct(
     StringList = _StringList_new,
     StringListDict = _StringListDict_new,
     WhichCfg = _WhichCfg,
+    # </block>
 )

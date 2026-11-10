@@ -30,7 +30,7 @@ def py_runtime_info_subject(info, *, meta):
 
     # buildifier: disable=uninitialized
     public = struct(
-        # go/keep-sorted start block=yes
+        # <block keep-sorted keep-sorted-pattern='^(?P<value>\w+) = '>
         actual = info,
         bootstrap_template = lambda *a, **k: _py_runtime_info_subject_bootstrap_template(self, *a, **k),
         coverage_files = lambda *a, **k: _py_runtime_info_subject_coverage_files(self, *a, **k),
@@ -44,7 +44,7 @@ def py_runtime_info_subject(info, *, meta):
         interpreter_version_info = lambda *a, **k: _py_runtime_info_subject_interpreter_version_info(self, *a, **k),
         python_version = lambda *a, **k: _py_runtime_info_subject_python_version(self, *a, **k),
         stub_shebang = lambda *a, **k: _py_runtime_info_subject_stub_shebang(self, *a, **k),
-        # go/keep-sorted end
+        # </block>
     )
     self = struct(
         actual = info,

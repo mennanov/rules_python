@@ -50,32 +50,32 @@ _GH_MAX_POLL_ATTEMPTS = 60
 
 _FAILED_CHECK_STATES = frozenset(
     [
-        # keep-sorted start
+        # <block keep-sorted>
         "CANCELLED",
         "FAIL",
         "FAILURE",
         "STARTUP_FAILURE",
         "TIMED_OUT",
-        # keep-sorted end
+        # </block>
     ]
 )
 
 _FAILED_BK_JOB_STATES = frozenset(
     [
-        # keep-sorted start
+        # <block keep-sorted>
         "broken",
         "failed",
         "timed_out",
-        # keep-sorted end
+        # </block>
     ]
 )
 
 _BLOCKED_BK_JOB_STATES = frozenset(
     [
-        # keep-sorted start
+        # <block keep-sorted>
         "blocked",
         "blocked_failed",
-        # keep-sorted end
+        # </block>
     ]
 )
 

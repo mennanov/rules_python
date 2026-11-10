@@ -1,0 +1,378 @@
+# Project-wide `blockwatch` settings and the rules that live outside source
+# files. See `.agents/rules/code-style.md` ("Synchronized sections and sorting")
+# for where each kind of rule goes. In short:
+#
+# * Inline `<block>` tags in comments (the default): in a file that can hold
+#   comments, for a region people edit as a unit. This covers `keep-sorted`,
+#   `keep-unique`, `affects` and `same-as` between regions of code.
+# * An entry here, when any of these holds:
+#   1. the file cannot hold a tag: JSON, a format without a grammar such as
+#      `.txt` or `go.mod`, or text users copy or see rendered (examples,
+#      docstrings, templates);
+#   2. the rule is about one key of a YAML, TOML, JSON or Markdown file, which
+#      a symbol path addresses without any comment;
+#   3. one value is repeated in three or more files, so the whole group is
+#      readable in one place;
+#   4. one rule fans out over many files with a glob.
+#
+# `same-as` compares the actual values on every run, so a pair that already
+# disagrees is reported even when nobody edits it. `ifttt-lint` and
+# `keep-sorted` are replaced by `blockwatch`.
+ignore = ['**/testdata/**']
+
+[extensions]
+# `downloader_config.cfg` uses `#` comments, like Python.
+cfg = 'py'
+
+# ---------------------------------------------------------------------------
+# Tool versions: CI must use the version pre-commit pins.
+# ---------------------------------------------------------------------------
+
+[[block]]
+target = '.bazelci/presubmit.yml#/buildifier/version'
+name = 'buildifier-version'
+same-as = '.pre-commit-config.yaml:buildifier-rev'
+
+[[block]]
+target = '.bazelci/presubmit.yml#/buildifier/warnings'
+name = 'buildifier-warnings'
+same-as = '.pre-commit-config.yaml:buildifier-args'
+
+[[block]]
+target = '.github/workflows/ci.yaml#/jobs/ruff/steps/1/with/version'
+name = 'ruff-check-version'
+same-as = '.pre-commit-config.yaml:ruff-rev'
+same-as-pattern = '^(?P<value>.+)$'
+
+[[block]]
+target = '.github/workflows/ci.yaml#/jobs/ruff/steps/2/with/version'
+name = 'ruff-format-version'
+same-as = '.pre-commit-config.yaml:ruff-rev'
+same-as-pattern = '^(?P<value>.+)$'
+
+# Both ruff invocations in CI exclude what the pre-commit hooks exclude.
+[[block]]
+target = '.github/workflows/ci.yaml#/jobs/ruff/steps/1/with/args'
+name = 'ruff-check-exclude'
+same-as = '.pre-commit-config.yaml:ruff-check-exclude-hook'
+same-as-pattern = '--(?:extend-)?exclude (?P<value>\S+)'
+
+[[block]]
+target = '.github/workflows/ci.yaml#/jobs/ruff/steps/2/with/args'
+name = 'ruff-format-exclude'
+same-as = '.pre-commit-config.yaml:ruff-format-exclude-hook'
+same-as-pattern = '--(?:extend-)?exclude (?P<value>\S+)'
+
+[[block]]
+target = '.github/workflows/ci.yaml#/jobs/blockwatch/steps/1/with/urls'
+name = 'blockwatch-url'
+same-as = '.pre-commit-config.yaml:blockwatch-rev'
+same-as-pattern = '/download/v(?P<value>[^/]+)/'
+
+# ---------------------------------------------------------------------------
+# Bazel CI configuration. `version.bzl` carries the other side, as a tag.
+# ---------------------------------------------------------------------------
+
+[[block]]
+target = '.bazelci/presubmit.yml#/.minimum_supported_version/bazel'
+name = 'minimum-bazel-major'
+same-as-pattern = '^(?P<value>\d+)\.'
+same-as = 'version.bzl:minimum-bazel-version'
+
+# The Bazel versions the BCR presubmits test match the repo's CI matrix.
+[[block]]
+target = '.bazelci/presubmit.yml#/matrix/bazel'
+name = 'bcr-matrix-bazel'
+same-as-pattern = '(?P<value>\d+)\.[x*]'
+same-as = '.bcr/presubmit.yml:bcr-module-bazel,.bcr/gazelle/presubmit.yml:bcr-gazelle-module-bazel'
+
+[[block]]
+target = '.bcr/presubmit.yml#/bcr_test_module/matrix/bazel'
+name = 'bcr-module-bazel'
+same-as-pattern = '(?P<value>\d+)\.[x*]'
+same-as = '.bazelci/presubmit.yml:bcr-matrix-bazel'
+
+[[block]]
+target = '.bcr/gazelle/presubmit.yml#/bcr_test_module/matrix/bazel'
+name = 'bcr-gazelle-module-bazel'
+same-as-pattern = '(?P<value>\d+)\.[x*]'
+same-as = '.bazelci/presubmit.yml:bcr-matrix-bazel'
+
+# Platforms: BCR names `macos` what `.bazelci` names `macos_arm64`.
+[[block]]
+target = '.bazelci/presubmit.yml#/matrix/platform'
+name = 'bcr-matrix-platform'
+same-as-pattern = '(?P<value>ubuntu2204|debian13|windows|macos)'
+same-as = '.bcr/presubmit.yml:bcr-module-platform'
+
+[[block]]
+target = '.bcr/presubmit.yml#/bcr_test_module/matrix/platform'
+name = 'bcr-module-platform'
+same-as-pattern = '(?P<value>ubuntu2204|debian13|windows|macos)'
+same-as = '.bazelci/presubmit.yml:bcr-matrix-platform'
+
+# The `bcr_test` task in `.bazelci` runs the targets the BCR task runs.
+[[block]]
+target = '.bazelci/presubmit.yml#/tasks/bcr_test/build_targets'
+name = 'bcr-test-build-targets'
+same-as-pattern = '"(?P<value>[^"]+)"'
+same-as-mode = 'sequence'
+same-as = '.bcr/presubmit.yml:bcr-module-build-targets'
+
+[[block]]
+target = '.bcr/presubmit.yml#/bcr_test_module/tasks/run_tests/build_targets'
+name = 'bcr-module-build-targets'
+same-as-pattern = '"(?P<value>[^"]+)"'
+same-as-mode = 'sequence'
+same-as = '.bazelci/presubmit.yml:bcr-test-build-targets'
+
+[[block]]
+target = '.bazelci/presubmit.yml#/tasks/bcr_test/test_targets'
+name = 'bcr-test-test-targets'
+same-as-pattern = '"(?P<value>[^"]+)"'
+same-as-mode = 'sequence'
+same-as = '.bcr/presubmit.yml:bcr-module-test-targets'
+
+[[block]]
+target = '.bcr/presubmit.yml#/bcr_test_module/tasks/run_tests/test_targets'
+name = 'bcr-module-test-targets'
+same-as-pattern = '"(?P<value>[^"]+)"'
+same-as-mode = 'sequence'
+same-as = '.bazelci/presubmit.yml:bcr-test-test-targets'
+
+# The Gazelle BCR task in `.bazelci` runs what `.bcr/gazelle` runs. Quoted
+# entries are compared with surrounding whitespace ignored.
+[[block]]
+target = '.bazelci/presubmit.yml#/.gazelle_common_bcr/shell_commands'
+name = 'gazelle-shell-commands'
+same-as-pattern = '"\s*(?P<value>[^"]*?)\s*"'
+same-as-mode = 'sequence'
+same-as = '.bcr/gazelle/presubmit.yml:bcr-gazelle-shell-commands'
+
+[[block]]
+target = '.bcr/gazelle/presubmit.yml#/bcr_test_module/tasks/run_tests/shell_commands'
+name = 'bcr-gazelle-shell-commands'
+same-as-pattern = '"\s*(?P<value>[^"]*?)\s*"'
+same-as-mode = 'sequence'
+same-as = '.bazelci/presubmit.yml:gazelle-shell-commands'
+
+[[block]]
+target = '.bazelci/presubmit.yml#/.gazelle_common_bcr/batch_commands'
+name = 'gazelle-batch-commands'
+same-as-pattern = '"\s*(?P<value>[^"]*?)\s*"'
+same-as-mode = 'sequence'
+same-as = '.bcr/gazelle/presubmit.yml:bcr-gazelle-batch-commands'
+
+[[block]]
+target = '.bcr/gazelle/presubmit.yml#/bcr_test_module/tasks/run_tests/batch_commands'
+name = 'bcr-gazelle-batch-commands'
+same-as-pattern = '"\s*(?P<value>[^"]*?)\s*"'
+same-as-mode = 'sequence'
+same-as = '.bazelci/presubmit.yml:gazelle-batch-commands'
+
+[[block]]
+target = '.bazelci/presubmit.yml#/.gazelle_common_bcr/build_targets'
+name = 'gazelle-build-targets'
+same-as-pattern = '"(?P<value>[^"]+)"'
+same-as-mode = 'sequence'
+same-as = '.bcr/gazelle/presubmit.yml:bcr-gazelle-build-targets'
+
+[[block]]
+target = '.bcr/gazelle/presubmit.yml#/bcr_test_module/tasks/run_tests/build_targets'
+name = 'bcr-gazelle-build-targets'
+same-as-pattern = '"(?P<value>[^"]+)"'
+same-as-mode = 'sequence'
+same-as = '.bazelci/presubmit.yml:gazelle-build-targets'
+
+[[block]]
+target = '.bazelci/presubmit.yml#/.gazelle_common_bcr/test_targets'
+name = 'gazelle-test-targets'
+same-as-pattern = '"(?P<value>[^"]+)"'
+same-as-mode = 'sequence'
+same-as = '.bcr/gazelle/presubmit.yml:bcr-gazelle-test-targets'
+
+[[block]]
+target = '.bcr/gazelle/presubmit.yml#/bcr_test_module/tasks/run_tests/test_targets'
+name = 'bcr-gazelle-test-targets'
+same-as-pattern = '"(?P<value>[^"]+)"'
+same-as-mode = 'sequence'
+same-as = '.bazelci/presubmit.yml:gazelle-test-targets'
+
+# ---------------------------------------------------------------------------
+# Rust: the crates workspace uses the edition the Bazel toolchains build with.
+# `MODULE.bazel` carries the other side, as tags.
+# ---------------------------------------------------------------------------
+
+[[block]]
+target = 'crates/Cargo.toml#/package/edition'
+name = 'rust-edition'
+same-as = 'MODULE.bazel:rust-edition'
+
+# ---------------------------------------------------------------------------
+# Runfiles root extraction and cleanup in the bootstrap template. A `.txt`
+# file has no grammar, so the two regions are addressed by pattern. The same
+# pair in `zipapp/zip_main_template.py` uses tags.
+# ---------------------------------------------------------------------------
+
+[[block]]
+target = 'python/private/python_bootstrap_template.txt'
+target-pattern = '(?s)  temp_dir = tempfile\.mkdtemp\(.*?return join\(temp_dir, .runfiles.\)'
+name = 'runfiles-root-structure'
+affects = 'python/private/python_bootstrap_template.txt:runfiles-root-cleanup'
+
+[[block]]
+target = 'python/private/python_bootstrap_template.txt'
+target-pattern = '(?s)    runfiles_root = create_runfiles_root\(\)\n.*?delete_dirs\.append\(dirname\(runfiles_root\)\)'
+name = 'runfiles-root-cleanup'
+affects = 'python/private/python_bootstrap_template.txt:runfiles-root-structure'
+
+# ---------------------------------------------------------------------------
+# One value repeated in many files (bzlmod and WORKSPACE, examples, docs).
+# The first block of each group is the reference the others must equal.
+# ---------------------------------------------------------------------------
+
+# bazel_skylib
+[[block]]
+target = 'MODULE.bazel'
+target-pattern = 'name = "bazel_skylib", version = "(?P<value>[^"]+)"'
+name = 'skylib-version'
+
+[[block]]
+target = 'MODULE.bazel'
+target-pattern = 'name = "bazel_skylib_gazelle_plugin", version = "(?P<value>[^"]+)"'
+name = 'skylib-gazelle-plugin-version'
+same-as = 'MODULE.bazel:skylib-version'
+
+[[block]]
+target = 'gazelle/MODULE.bazel'
+target-pattern = 'name = "bazel_skylib", version = "(?P<value>[^"]+)"'
+name = 'skylib-version'
+same-as = 'MODULE.bazel:skylib-version'
+
+[[block]]
+target = 'sphinxdocs/MODULE.bazel'
+target-pattern = 'name = "bazel_skylib", version = "(?P<value>[^"]+)"'
+name = 'skylib-version'
+same-as = 'MODULE.bazel:skylib-version'
+
+[[block]]
+target = 'sphinxdocs/integration_tests/bcr/MODULE.bazel'
+target-pattern = 'name = "bazel_skylib", version = "(?P<value>[^"]+)"'
+name = 'skylib-version'
+same-as = 'MODULE.bazel:skylib-version'
+
+[[block]]
+target = 'gazelle/WORKSPACE'
+target-pattern = '(?s)(?P<value>"https://mirror\.bazel\.build/github\.com/bazelbuild/bazel-skylib/[^"]+",\s+"https://github\.com/bazelbuild/bazel-skylib/[^"]+",)'
+name = 'skylib-version'
+same-as-pattern = 'bazel-skylib/releases/download/(?P<value>[^/]+)/'
+same-as = 'MODULE.bazel:skylib-version'
+
+[[block]]
+target = 'internal_dev_deps.bzl'
+target-pattern = '(?s)(?P<value>"https://mirror\.bazel\.build/github\.com/bazelbuild/bazel-skylib/[^"]+",\s+"https://github\.com/bazelbuild/bazel-skylib/[^"]+",)'
+name = 'skylib-version'
+same-as-pattern = 'bazel-skylib/releases/download/(?P<value>[^/]+)/'
+same-as = 'MODULE.bazel:skylib-version'
+
+[[block]]
+target = 'python/private/py_repositories.bzl'
+target-pattern = '(?s)(?P<value>"https://mirror\.bazel\.build/github\.com/bazelbuild/bazel-skylib/[^"]+",\s+"https://github\.com/bazelbuild/bazel-skylib/[^"]+",)'
+name = 'skylib-version'
+same-as-pattern = 'bazel-skylib/releases/download/(?P<value>[^/]+)/'
+same-as = 'MODULE.bazel:skylib-version'
+
+# bazel-gazelle, used by the Gazelle plugin (bzlmod, WORKSPACE and Go modules)
+[[block]]
+target = 'gazelle/MODULE.bazel'
+target-pattern = 'name = "gazelle", version = "(?P<value>[^"]+)"'
+name = 'gazelle-version'
+
+[[block]]
+target = 'gazelle/go.mod'
+target-pattern = 'github\.com/bazelbuild/bazel-gazelle v(?P<value>\S+)'
+name = 'gazelle-version'
+same-as = 'gazelle/MODULE.bazel:gazelle-version'
+
+[[block]]
+target = 'gazelle/deps.bzl'
+target-pattern = '(?s)importpath = "github\.com/bazelbuild/bazel-gazelle",.*?version = "v(?P<value>[^"]+)"'
+name = 'gazelle-version'
+same-as = 'gazelle/MODULE.bazel:gazelle-version'
+
+[[block]]
+target = 'gazelle/WORKSPACE'
+target-pattern = '(?s)(?P<value>"https://mirror\.bazel\.build/github\.com/bazelbuild/bazel-gazelle/[^"]+",\s+"https://github\.com/bazelbuild/bazel-gazelle/[^"]+",)'
+name = 'gazelle-version'
+same-as-pattern = 'bazel-gazelle/releases/download/v(?P<value>[^/]+)/'
+same-as = 'gazelle/MODULE.bazel:gazelle-version'
+
+[[block]]
+target = 'gazelle/examples/bzlmod_build_file_generation/MODULE.bazel'
+target-pattern = 'name = "gazelle", version = "(?P<value>[^"]+)"'
+name = 'gazelle-version'
+same-as = 'gazelle/MODULE.bazel:gazelle-version'
+
+# The Gazelle example depends on rules_python and its Gazelle plugin at one
+# version.
+[[block]]
+target = 'gazelle/examples/bzlmod_build_file_generation/MODULE.bazel'
+target-pattern = 'name = "rules_python", version = "(?P<value>[^"]+)"'
+name = 'rules-python-version'
+same-as = 'gazelle/examples/bzlmod_build_file_generation/MODULE.bazel:rules-python-gazelle-plugin-version'
+
+[[block]]
+target = 'gazelle/examples/bzlmod_build_file_generation/MODULE.bazel'
+target-pattern = 'name = "rules_python_gazelle_plugin", version = "(?P<value>[^"]+)"'
+name = 'rules-python-gazelle-plugin-version'
+same-as = 'gazelle/examples/bzlmod_build_file_generation/MODULE.bazel:rules-python-version'
+
+# The default `uv` version, where examples, integration tests and docstrings
+# show it. The reference is `uv-default-version` in `MODULE.bazel`.
+[[block]]
+target = 'examples/bzlmod/MODULE.bazel'
+target-pattern = 'uv\.configure\(version = "(?P<value>[^"]+)"\)'
+name = 'uv-version'
+same-as = 'MODULE.bazel:uv-default-version'
+
+[[block]]
+target = 'examples/multi_python_versions/MODULE.bazel'
+target-pattern = 'uv\.configure\(version = "(?P<value>[^"]+)"\)'
+name = 'uv-version'
+same-as = 'MODULE.bazel:uv-default-version'
+
+[[block]]
+target = 'examples/pip_parse/MODULE.bazel'
+target-pattern = 'uv\.configure\(version = "(?P<value>[^"]+)"\)'
+name = 'uv-version'
+same-as = 'MODULE.bazel:uv-default-version'
+
+[[block]]
+target = 'gazelle/examples/bzlmod_build_file_generation/MODULE.bazel'
+target-pattern = 'uv\.configure\(version = "(?P<value>[^"]+)"\)'
+name = 'uv-version'
+same-as = 'MODULE.bazel:uv-default-version'
+
+[[block]]
+target = 'tests/integration/uv_lock/MODULE.bazel'
+target-pattern = 'uv\.configure\(version = "(?P<value>[^"]+)"\)'
+name = 'uv-version'
+same-as = 'MODULE.bazel:uv-default-version'
+
+[[block]]
+target = 'tests/integration/uv_lock/WORKSPACE'
+target-pattern = 'versions = \["(?P<value>[^"]+)"\]'
+name = 'uv-version'
+same-as = 'MODULE.bazel:uv-default-version'
+
+[[block]]
+target = 'python/uv/private/uv.bzl'
+target-pattern = 'uv\.configure\(version = "(?P<value>[^"]+)"\)'
+name = 'uv-version'
+same-as = 'MODULE.bazel:uv-default-version'
+
+[[block]]
+target = 'python/uv/private/uv_toolchains_manifest.bzl'
+target-pattern = 'versions = \["(?P<value>[^"]+)"\]'
+name = 'uv-version'
+same-as = 'MODULE.bazel:uv-default-version'

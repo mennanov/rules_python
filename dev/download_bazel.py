@@ -40,7 +40,7 @@ INITIAL_DELAY_SECONDS = verified_download.DEFAULT_INITIAL_DELAY_SECONDS
 # 1.28.1 (latest version published to the npm registry).
 # fmt: off
 BAZELISK_URLS: dict[str, list[tuple[str, str, str]]] = {
-    # keep-sorted start block=yes
+    # <block keep-sorted keep-sorted-pattern='^"(?P<value>[a-z0-9-]+)": \['>
     "darwin-amd64": [
         ("https://github.com/bazelbuild/bazelisk/releases/download/v1.30.0/bazelisk-darwin-amd64", "a0e6468b0c6b812f782d8cbfb05824121f6980c0bd70aaa1774fb8272bb7b2ad", ""),
         ("https://registry.npmjs.org/@bazel/bazelisk/-/bazelisk-1.28.1.tgz", "023225736cea5dc88f2b0807d5b1af4eb0f69a4ed45e3994b2c18c263bc80e48", "package/bazelisk-darwin_amd64"),
@@ -65,7 +65,7 @@ BAZELISK_URLS: dict[str, list[tuple[str, str, str]]] = {
         ("https://github.com/bazelbuild/bazelisk/releases/download/v1.30.0/bazelisk-windows-arm64.exe", "cb832b1d157e0dc5f89108da426f9c6fe087f5b15873e072480ec49cc5afe488", ""),
         ("https://registry.npmjs.org/@bazel/bazelisk/-/bazelisk-1.28.1.tgz", "85ba3d92a8bdcbecc06657b8c0ae30f4307b552d601d9d6246f8a98aec36c346", "package/bazelisk-windows_arm64.exe"),
     ],
-    # keep-sorted end
+    # </block>
 }
 # fmt: on
 

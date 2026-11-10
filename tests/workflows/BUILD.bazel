@@ -26,29 +26,6 @@ pytest_test(
 )
 
 py_library(
-    name = "check_keep_sorted",
-    testonly = True,
-    srcs = ["//.github/workflows:check_keep_sorted.py"],
-    imports = ["../../.github/workflows"],
-    target_compatible_with = NOT_WINDOWS,
-)
-
-pytest_test(
-    name = "check_keep_sorted_test",
-    srcs = ["check_keep_sorted_test.py"],
-    data = [
-        "//:.pre-commit-config.yaml",
-        "//.github/workflows:all_files",
-    ],
-    target_compatible_with = NOT_WINDOWS,
-    deps = [
-        ":check_keep_sorted",
-        "//python/runfiles",
-        "@pypi//pyyaml",
-    ],
-)
-
-py_library(
     name = "on_comment",
     testonly = True,
     srcs = ["//.github/workflows:on_comment.py"],
